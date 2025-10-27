@@ -100,7 +100,7 @@ function BlogCard({ blog, onClick, featured = false }) {
           sx={{
             height: '100%',
             width: '100%',
-            objectFit: 'cover',
+            // objectFit: 'cover',
             transition: 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)',
             backgroundColor: '#f5f5f5', // Background color while loading
           }}

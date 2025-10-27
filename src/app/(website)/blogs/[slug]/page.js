@@ -326,8 +326,8 @@ function BlogDetailPage() {
                   }}
                   sx={{
                     width: '100%',
-                    height: { xs: 300, sm: 400, md: 500 },
-                    objectFit: 'cover',
+                    // height: { xs: 300, sm: 400, md: 500 },
+                    // objectFit: 'cover',
                     transition: 'transform 0.5s ease',
                     backgroundColor: '#f5f5f5', // Background color while loading
                     '&:hover': {
@@ -844,7 +844,7 @@ function BlogDetailPage() {
                             sx={{
                               width: 80,
                               height: 80,
-                              objectFit: 'cover',
+                              // objectFit: 'cover',
                               borderRadius: 2,
                               backgroundColor: '#f5f5f5', // Background color while loading
                             }}
