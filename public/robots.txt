@@ -1,0 +1,40 @@
+# Robots.txt for Exam Partner
+
+# Allow all crawlers
+User-agent: *
+Allow: /
+
+# Disallow admin and API routes
+Disallow: /admin/
+Disallow: /api/
+Disallow: /login
+
+# Allow major search engines
+User-agent: Googlebot
+Allow: /
+
+User-agent: Bingbot
+Allow: /
+
+# Allow AI crawlers
+User-agent: GPTBot
+Allow: /
+
+User-agent: CCBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: anthropic-ai
+Allow: /
+
+User-agent: FacebookBot
+Allow: /
+
+# Sitemap location
+Sitemap: http://localhost:3000/sitemap.xml
+

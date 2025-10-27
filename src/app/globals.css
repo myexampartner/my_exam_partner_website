@@ -1,0 +1,175 @@
+
+:root {
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif !important;
+  line-height: 1.5;
+  font-weight: 400;
+
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+
+    --primary-color:rgba(6, 11, 38, 1);
+    --primary-light: rgb(9,24,58);
+    --secondary-color: rgba(158, 160, 253, 0.161);
+    --success-color: #28a745;
+    --success-light: #1ddb492f;
+    --danger-color: #dc3545;
+    --warning-color: #ffc107; 
+    --info-color: rgba(11, 32, 148, 0.986);
+    --light-color: rgba(255, 255, 255, 0.623);
+    --dark-color: #000000;
+  
+    /* Text Colors */
+    --text-primary: white;
+    --text-secondary: rgb(70, 68, 68);
+    --text-muted: #b6b3b3da;
+  
+    /* Background Colors */
+    --bg-primary: rgb(17,14,38) ;
+    --bg-secondary: #232333;
+    --bg-dark: #000000;
+  
+    /* Font Sizes */
+    --font-size-h1: 2.5rem;
+    --font-size-h2: 2rem;
+    --font-size-h3: 1.75rem;
+    --font-size-h4: 1.5rem;
+    --font-size-h5: 1.25rem;
+    --font-size-h6: 1rem;
+    --font-size-body: 1rem;
+    --font-size-small: 0.875rem;
+    --font-family: var(--font-quicksand), 'Quicksand', sans-serif !important;
+    
+}
+/* Hide scrollbar & remove its space */
+html, body {
+  margin: 0 auto;
+  padding: 0;
+  max-width: 1550px;
+  overflow-y: scroll; /* keep scroll behavior normal */
+  height: 100%;
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* Internet Explorer / Edge */
+}
+
+/* For Chrome, Edge, Safari */
+::-webkit-scrollbar {
+  display: none;
+}
+
+/* Admin Layout Specific Styles */
+.admin-layout {
+  height: 100vh !important;
+  overflow: hidden !important;
+}
+
+.admin-sidebar {
+  height: 100% !important;
+  max-height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+.admin-main-content {
+  height: 100vh !important;
+  overflow-y: auto !important;
+}
+
+
+
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #ffffff;
+    --foreground:  #0a0a0a  ;
+  }
+}
+
+
+body {
+  color: var(--foreground);
+  background: var(--background);
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif !important;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+* {
+  box-sizing: border-box;
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif !important;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* Ensure all MUI components use Quicksand */
+.MuiTypography-root,
+.MuiButton-root,
+.MuiTextField-root,
+.MuiInputBase-root,
+.MuiFormLabel-root,
+.MuiMenuItem-root,
+.MuiListItem-root,
+.MuiAppBar-root,
+.MuiToolbar-root,
+.MuiDrawer-root,
+.MuiPaper-root,
+.MuiCard-root,
+.MuiChip-root,
+.MuiTab-root,
+.MuiAlert-root,
+.MuiSnackbar-root,
+.MuiDialog-root,
+.MuiModal-root {
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif !important;
+}
+
+/* Override any existing font-family declarations */
+* {
+  font-family: var(--font-quicksand), 'Quicksand', sans-serif !important;
+}
+
+/* React Phone Input 2 Styling - Let built-in flags work */
+.react-tel-input .selected-flag {
+  display: flex !important;
+  align-items: center !important;
+  padding: 0 8px !important;
+}
+
+.react-tel-input .flag-dropdown {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  background: transparent !important;
+}
+
+.react-tel-input .country-list {
+  position: absolute !important;
+  top: 100% !important;
+  left: 0 !important;
+  right: 0 !important;
+  z-index: 1000 !important;
+  background: white !important;
+  border: 1px solid #ccc !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1) !important;
+  max-height: 200px !important;
+  overflow-y: auto !important;
+}
+
+.react-tel-input .country {
+  padding: 8px 12px !important;
+  cursor: pointer !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.react-tel-input .country:hover {
+  background-color: #f5f5f5 !important;
+}
+
