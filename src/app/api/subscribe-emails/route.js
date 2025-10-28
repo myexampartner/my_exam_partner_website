@@ -28,17 +28,17 @@ export async function GET(request) {
       query.status = status;
     }
     
-    // Add date filtering
+    // Add date filtering for email send date
     if (dateFrom || dateTo) {
-      query.subscribedAt = {};
+      query.lastEmailSentAt = {};
       if (dateFrom) {
-        query.subscribedAt.$gte = new Date(dateFrom);
+        query.lastEmailSentAt.$gte = new Date(dateFrom);
       }
       if (dateTo) {
         // Add one day to include the entire end date
         const endDate = new Date(dateTo);
         endDate.setDate(endDate.getDate() + 1);
-        query.subscribedAt.$lt = endDate;
+        query.lastEmailSentAt.$lt = endDate;
       }
     }
     

@@ -30,6 +30,7 @@ import {
   People,
   Article,
   Email,
+  Campaign,
 } from "@mui/icons-material";
 import { useRouter, usePathname } from "next/navigation";
 import Swal from 'sweetalert2';
@@ -87,7 +88,8 @@ export default function AdminLayout({ children }) {
     { text: "Blogs", icon: <Article />, path: "/admin/blogs" },
     { text: "Courses", icon: <MenuBook />, path: "/admin/courses" },
     { text: "Pricing Plans", icon: <AttachMoney />, path: "/admin/pricing" },
-    // { text: "Subscribe Emails", icon: <Email />, path: "/admin/subscribe-emails" },
+    { text: "Subscribe Emails", icon: <Email />, path: "/admin/subscribe-emails" },
+    { text: "Promotional Emails", icon: <Campaign />, path: "/admin/promotional-emails" },
     // { text: "Settings", icon: <Settings />, path: "/admin/settings" },
   ];
 
