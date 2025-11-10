@@ -56,6 +56,27 @@ import {
     } from "@mui/icons-material";
 import Swal from "sweetalert2";
 
+const buildBulletList = (listString = "") =>
+  listString
+    .split("\n")
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .map((item) => `<li>${item}</li>`)
+    .join("");
+
+const isValidHttpUrl = (value) => {
+  if (!value || typeof value !== "string") return false;
+  try {
+    const url = new URL(value.trim());
+    return ["http:", "https:"].includes(url.protocol);
+  } catch (_err) {
+    return false;
+  }
+};
+
+const toSafeUrl = (value, fallback = "#") =>
+  isValidHttpUrl(value) ? value.trim() : fallback;
+
 function PromotionalEmailsManagement() {
   const [templates, setTemplates] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -71,6 +92,8 @@ function PromotionalEmailsManagement() {
   });
   const [sending, setSending] = useState(false);
   const [snackbar, setSnackbar] = useState({ open: false, message: "", severity: "success" });
+  const [dynamicFieldValues, setDynamicFieldValues] = useState({});
+  const [fieldErrors, setFieldErrors] = useState({});
   
   // Dynamic stats state
   const [dynamicStats, setDynamicStats] = useState({
@@ -106,6 +129,111 @@ function PromotionalEmailsManagement() {
       const [emailHistoryDialog, setEmailHistoryDialog] = useState(false);
       const [selectedEmailForHistory, setSelectedEmailForHistory] = useState(null);
 
+  const getDefaultFieldValues = (template) => {
+    if (!template?.dynamicFields?.length) return {};
+    return template.dynamicFields.reduce((acc, field) => {
+      acc[field.name] = field.defaultValue ?? "";
+      return acc;
+    }, {});
+  };
+
+  const getTemplateContent = (template, values) => {
+    if (!template) return "";
+    if (typeof template.renderContent === "function") {
+      const fieldValues = values ?? getDefaultFieldValues(template);
+      return template.renderContent(fieldValues);
+    }
+    return template.content || "";
+  };
+
+  const handleDynamicFieldChange = (fieldName, value) => {
+    setDynamicFieldValues((prev) => ({ ...prev, [fieldName]: value }));
+    setFieldErrors((prev) => ({ ...prev, [fieldName]: "" }));
+  };
+
+  const validateDynamicFields = (template, values) => {
+    if (!template?.dynamicFields?.length) return true;
+
+    const errors = {};
+
+    template.dynamicFields.forEach((field) => {
+      const rawValue = values[field.name];
+      const value = typeof rawValue === "string" ? rawValue.trim() : rawValue;
+
+      if (field.required && (!value && value !== 0)) {
+        errors[field.name] = `${field.label} is required`;
+        return;
+      }
+
+      if (field.type === "url" && value && !isValidHttpUrl(value)) {
+        errors[field.name] = "Enter a valid URL";
+        return;
+      }
+
+      if (field.type === "number" && value !== "" && value !== null) {
+        const numericValue = Number(value);
+        if (!Number.isFinite(numericValue)) {
+          errors[field.name] = "Enter a valid number";
+        }
+      }
+    });
+
+    setFieldErrors(errors);
+    return Object.keys(errors).length === 0;
+  };
+
+  const renderDynamicFieldInput = (field) => {
+    const value = dynamicFieldValues[field.name] ?? "";
+    const errorMessage = fieldErrors[field.name] || "";
+
+    const sharedProps = {
+      key: field.name,
+      fullWidth: true,
+      label: field.label,
+      value,
+      onChange: (event) => handleDynamicFieldChange(field.name, event.target.value),
+      error: Boolean(errorMessage),
+      helperText: errorMessage || field.helperText || "",
+      sx: {
+        "& .MuiOutlinedInput-root": {
+          borderRadius: 2,
+        },
+      },
+    };
+
+    switch (field.type) {
+      case "textarea":
+        return <TextField {...sharedProps} multiline rows={4} />;
+      case "number":
+        return <TextField {...sharedProps} type="number" />;
+      case "url":
+        return <TextField {...sharedProps} type="url" />;
+      default:
+        return <TextField {...sharedProps} />;
+    }
+  };
+
+  const hasMissingRequiredDynamicFields = (template, values) => {
+    if (!template?.dynamicFields?.length) return false;
+
+    return template.dynamicFields.some((field) => {
+      if (!field.required) return false;
+      const rawValue = values[field.name];
+
+      if (field.type === "number") {
+        return rawValue === "" || rawValue === null || rawValue === undefined;
+      }
+
+      return !String(rawValue ?? "").trim();
+    });
+  };
+
+  const closeSendDialog = () => {
+    setSendDialog(false);
+    setFieldErrors({});
+    setDynamicFieldValues({});
+  };
+
   // Email templates data
   const emailTemplates = [
     {
@@ -114,7 +242,20 @@ function PromotionalEmailsManagement() {
       category: "Onboarding",
       subject: "Welcome to My Exam Partner!",
       preview: "Get started with your learning journey...",
-      content: `
+      dynamicFields: [
+        {
+          name: "heroButtonUrl",
+          label: "Get Started Button URL",
+          type: "url",
+          required: true,
+          defaultValue: "https://myexampartner.com/get-started",
+          helperText: "Paste the full link for the Get Started button",
+        },
+      ],
+      renderContent: (values) => {
+        const heroButtonUrl = toSafeUrl(values?.heroButtonUrl);
+
+        return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #1a1a2e; margin-bottom: 10px;">Welcome to My Exam Partner!</h1>
@@ -132,7 +273,7 @@ function PromotionalEmailsManagement() {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="#" style="background: #1a1a2e; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Get Started</a>
+            <a href="${heroButtonUrl}" style="background: #1a1a2e; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Get Started</a>
           </div>
           
           <div style="border-top: 1px solid #e0e0e0; padding-top: 20px; text-align: center; color: #666; font-size: 14px;">
@@ -140,7 +281,8 @@ function PromotionalEmailsManagement() {
             <p>If you have any questions, feel free to contact us.</p>
           </div>
         </div>
-      `,
+      `;
+      },
       lastUsed: "",
       usageCount: 0,
     },
@@ -150,7 +292,30 @@ function PromotionalEmailsManagement() {
       category: "Promotion",
       subject: "Special Discount - Limited Time Offer!",
       preview: "Get 20% off on all courses this month...",
-      content: `
+      dynamicFields: [
+        {
+          name: "discountPercentage",
+          label: "Discount Percentage",
+          type: "number",
+          required: true,
+          defaultValue: "20",
+          helperText: "Enter a numeric discount value (e.g. 20)",
+        },
+        {
+          name: "ctaUrl",
+          label: "Claim Your Discount Button URL",
+          type: "url",
+          required: true,
+          defaultValue: "https://myexampartner.com/pricing",
+          helperText: "Paste the link for the Claim Your Discount button",
+        },
+      ],
+      renderContent: (values) => {
+        const discountValue = Number(values?.discountPercentage);
+        const discountDisplay = Number.isFinite(discountValue) ? `${discountValue}%` : "20%";
+        const ctaUrl = toSafeUrl(values?.ctaUrl);
+
+        return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #1a1a2e; margin-bottom: 10px;">🎉 Special Discount Alert!</h1>
@@ -158,7 +323,7 @@ function PromotionalEmailsManagement() {
           </div>
           
           <div style="background: linear-gradient(135deg, #ff6b6b, #ffa500); padding: 30px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: white;">
-            <h2 style="margin: 0; font-size: 36px;">20% OFF</h2>
+            <h2 style="margin: 0; font-size: 36px;">${discountDisplay} OFF</h2>
             <p style="margin: 10px 0 0 0; font-size: 18px;">On All Courses</p>
             <p style="margin: 5px 0 0 0; font-size: 14px; opacity: 0.9;">Valid until end of this month</p>
           </div>
@@ -174,7 +339,7 @@ function PromotionalEmailsManagement() {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="#" style="background: #ff6b6b; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Claim Your Discount</a>
+            <a href="${ctaUrl}" style="background: #ff6b6b; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Claim Your Discount</a>
           </div>
           
           <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
@@ -185,7 +350,8 @@ function PromotionalEmailsManagement() {
             <p>Terms and conditions apply. Contact us for more details.</p>
           </div>
         </div>
-      `,
+      `;
+      },
       lastUsed: "",
       usageCount: 0,
     },
@@ -195,7 +361,51 @@ function PromotionalEmailsManagement() {
       category: "Engagement",
       subject: "Don't forget your upcoming session!",
       preview: "Your tutoring session starts in 2 hours...",
-      content: `
+      dynamicFields: [
+        {
+          name: "sessionSubject",
+          label: "Subject",
+          type: "text",
+          required: true,
+          defaultValue: "Mathematics",
+        },
+        {
+          name: "tutorName",
+          label: "Tutor Name",
+          type: "text",
+          required: true,
+          defaultValue: "Sarah Johnson",
+        },
+        {
+          name: "sessionTime",
+          label: "Time",
+          type: "text",
+          required: true,
+          defaultValue: "2:00 PM - 3:00 PM",
+        },
+        {
+          name: "sessionDuration",
+          label: "Duration",
+          type: "text",
+          required: true,
+          defaultValue: "1 hour",
+        },
+        {
+          name: "joinUrl",
+          label: "Join Session URL",
+          type: "url",
+          required: true,
+          defaultValue: "https://myexampartner.com/session",
+        },
+      ],
+      renderContent: (values) => {
+        const sessionSubject = values?.sessionSubject?.trim() || "Mathematics";
+        const tutorName = values?.tutorName?.trim() || "Sarah Johnson";
+        const sessionTime = values?.sessionTime?.trim() || "2:00 PM - 3:00 PM";
+        const sessionDuration = values?.sessionDuration?.trim() || "1 hour";
+        const joinUrl = toSafeUrl(values?.joinUrl);
+
+        return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #1a1a2e; margin-bottom: 10px;">📚 Session Reminder</h1>
@@ -204,10 +414,10 @@ function PromotionalEmailsManagement() {
           
           <div style="background: #e3f2fd; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #2196f3;">
             <h3 style="color: #1a1a2e; margin-top: 0;">Session Details:</h3>
-            <p style="margin: 5px 0; color: #333;"><strong>Subject:</strong> Mathematics</p>
-            <p style="margin: 5px 0; color: #333;"><strong>Tutor:</strong> Sarah Johnson</p>
-            <p style="margin: 5px 0; color: #333;"><strong>Time:</strong> 2:00 PM - 3:00 PM</p>
-            <p style="margin: 5px 0; color: #333;"><strong>Duration:</strong> 1 hour</p>
+            <p style="margin: 5px 0; color: #333;"><strong>Subject:</strong> ${sessionSubject}</p>
+            <p style="margin: 5px 0; color: #333;"><strong>Tutor:</strong> ${tutorName}</p>
+            <p style="margin: 5px 0; color: #333;"><strong>Time:</strong> ${sessionTime}</p>
+            <p style="margin: 5px 0; color: #333;"><strong>Duration:</strong> ${sessionDuration}</p>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
@@ -221,7 +431,7 @@ function PromotionalEmailsManagement() {
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="#" style="background: #2196f3; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Join Session</a>
+            <a href="${joinUrl}" style="background: #2196f3; color: white; padding: 12px 30px; text-decoration: none; border-radius: 5px; display: inline-block;">Join Session</a>
           </div>
           
           <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
@@ -232,7 +442,8 @@ function PromotionalEmailsManagement() {
             <p>We're excited to see you in class!</p>
           </div>
         </div>
-      `,
+      `;
+      },
       lastUsed: "",
       usageCount: 0,
     },
@@ -242,42 +453,78 @@ function PromotionalEmailsManagement() {
       category: "Announcement",
       subject: "New Course Available - Advanced Physics",
       preview: "We're excited to announce our new Advanced Physics course...",
-      content: `
+      dynamicFields: [
+        {
+          name: "courseTitle",
+          label: "Course Title",
+          type: "text",
+          required: true,
+          defaultValue: "Advanced Physics",
+        },
+        {
+          name: "courseSubtitle",
+          label: "Course Subtitle",
+          type: "text",
+          required: true,
+          defaultValue: "Master complex concepts with expert guidance",
+        },
+        {
+          name: "courseHighlights",
+          label: "Course Highlights (one per line)",
+          type: "textarea",
+          required: true,
+          defaultValue: `Quantum Mechanics fundamentals\nThermodynamics and statistical mechanics\nElectromagnetic theory\nModern physics applications\nInteractive simulations and experiments`,
+        },
+        {
+          name: "whatsIncluded",
+          label: "What's Included (one per line)",
+          type: "textarea",
+          required: true,
+          defaultValue: `50+ video lessons\nPractice problems and solutions\nLive Q&A sessions\nProgress tracking\nCertificate of completion`,
+        },
+        {
+          name: "ctaUrl",
+          label: "Enroll Now Button URL",
+          type: "url",
+          required: true,
+          defaultValue: "https://myexampartner.com/courses/advanced-physics",
+        },
+      ],
+      renderContent: (values) => {
+        const courseTitle = values?.courseTitle?.trim() || "Advanced Physics";
+        const courseSubtitle = values?.courseSubtitle?.trim() || "Master complex concepts with expert guidance";
+        const highlightsHtml = buildBulletList(values?.courseHighlights);
+        const includedHtml = buildBulletList(values?.whatsIncluded);
+        const ctaUrl = toSafeUrl(values?.ctaUrl);
+
+        return `
         <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
           <div style="text-align: center; margin-bottom: 30px;">
             <h1 style="color: #1a1a2e; margin-bottom: 10px;">🚀 New Course Launch!</h1>
-            <p style="color: #666; font-size: 16px;">Advanced Physics is now available</p>
+            <p style="color: #666; font-size: 16px;">${courseTitle} is now available</p>
           </div>
           
           <div style="background: linear-gradient(135deg, #667eea, #764ba2); padding: 30px; border-radius: 8px; margin-bottom: 20px; text-align: center; color: white;">
-            <h2 style="margin: 0; font-size: 28px;">Advanced Physics</h2>
-            <p style="margin: 10px 0 0 0; font-size: 16px;">Master complex concepts with expert guidance</p>
+            <h2 style="margin: 0; font-size: 28px;">${courseTitle}</h2>
+            <p style="margin: 10px 0 0 0; font-size: 16px;">${courseSubtitle}</p>
           </div>
           
           <div style="background: #f8f9fa; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
             <h3 style="color: #1a1a2e; margin-top: 0;">Course Highlights:</h3>
             <ul style="color: #333; line-height: 1.6;">
-              <li>Quantum Mechanics fundamentals</li>
-              <li>Thermodynamics and statistical mechanics</li>
-              <li>Electromagnetic theory</li>
-              <li>Modern physics applications</li>
-              <li>Interactive simulations and experiments</li>
+              ${highlightsHtml}
             </ul>
           </div>
           
           <div style="background: #e8f5e8; padding: 20px; border-radius: 8px; margin-bottom: 20px; border-left: 4px solid #4caf50;">
             <h3 style="color: #1a1a2e; margin-top: 0;">What's Included:</h3>
             <ul style="color: #333; line-height: 1.6;">
-              <li>50+ video lessons</li>
-              <li>Practice problems and solutions</li>
-              <li>Live Q&A sessions</li>
-              <li>Progress tracking</li>
-              <li>Certificate of completion</li>
+              ${includedHtml}
             </ul>
           </div>
           
           <div style="text-align: center; margin: 30px 0;">
-            <a href="#" style="background: #667eea; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Enroll Now</a>
+            <a href="${ctaUrl}" style="background: #667eea; color: white; padding: 15px 40px; text-decoration: none; border-radius: 5px; display: inline-block; font-weight: bold;">Enroll Now</a>
           </div>
           
           <div style="background: #fff3cd; padding: 15px; border-radius: 5px; border-left: 4px solid #ffc107; margin-bottom: 20px;">
@@ -288,7 +535,8 @@ function PromotionalEmailsManagement() {
             <p>Ready to advance your physics knowledge? Join us today!</p>
           </div>
         </div>
-      `,
+      `;
+      },
       lastUsed: "",
       usageCount: 0,
     },
@@ -582,7 +830,11 @@ function PromotionalEmailsManagement() {
   };
 
   const handleSend = (template) => {
+    if (!template) return;
+
     setSelectedTemplate(template);
+    setDynamicFieldValues(getDefaultFieldValues(template));
+    setFieldErrors({});
     setEmailData({
       subject: template.subject,
       recipients: "selected",
@@ -594,6 +846,8 @@ function PromotionalEmailsManagement() {
   };
 
   const handleSendEmail = async () => {
+    if (!selectedTemplate) return;
+
     // Check if emails are selected
     if (emailData.recipients === 'selected' && selectedEmails.length === 0) {
       await Swal.fire({
@@ -608,7 +862,22 @@ function PromotionalEmailsManagement() {
       });
       return;
     }
-    
+
+    if (!validateDynamicFields(selectedTemplate, dynamicFieldValues)) {
+      await Swal.fire({
+        title: 'Missing Information',
+        text: 'Please fix the highlighted fields before sending the email.',
+        icon: 'warning',
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#ff9800',
+        showConfirmButton: true,
+        allowOutsideClick: false,
+        allowEscapeKey: false
+      });
+      return;
+    }
+
+    const finalContent = getTemplateContent(selectedTemplate, dynamicFieldValues);
     setSending(true);
     
     try {
@@ -620,7 +889,8 @@ function PromotionalEmailsManagement() {
         body: JSON.stringify({
           templateId: selectedTemplate.id,
           subject: emailData.subject,
-          content: selectedTemplate.content,
+          content: finalContent,
+          dynamicFieldValues,
           recipients: emailData.recipients,
           customEmails: emailData.customEmails,
           selectedEmails: selectedEmails,
@@ -634,6 +904,8 @@ function PromotionalEmailsManagement() {
       if (data.success) {
         // Close dialog first
         setSendDialog(false);
+        setFieldErrors({});
+        setDynamicFieldValues({});
         
         // Small delay to ensure dialog is closed
         setTimeout(async () => {
@@ -684,6 +956,8 @@ function PromotionalEmailsManagement() {
       
       // Close dialog first
       setSendDialog(false);
+      setFieldErrors({});
+      setDynamicFieldValues({});
       
       // Small delay to ensure dialog is closed
       setTimeout(async () => {
@@ -1365,7 +1639,7 @@ function PromotionalEmailsManagement() {
                   overflow: 'hidden',
                   backgroundColor: 'white'
                 }}>
-                  <div dangerouslySetInnerHTML={{ __html: selectedTemplate.content }} />
+                  <div dangerouslySetInnerHTML={{ __html: getTemplateContent(selectedTemplate) }} />
                 </Box>
               </Box>
             )}
@@ -1400,7 +1674,7 @@ function PromotionalEmailsManagement() {
         </Dialog>
 
         {/* Send Dialog */}
-        <Dialog open={sendDialog} onClose={() => setSendDialog(false)} maxWidth="sm" fullWidth>
+        <Dialog open={sendDialog} onClose={closeSendDialog} maxWidth="sm" fullWidth>
           <DialogTitle sx={{ 
             background: 'white', 
             color: '#1a1a2e',
@@ -1413,7 +1687,7 @@ function PromotionalEmailsManagement() {
               <Typography variant="h5" fontWeight="600" sx={{ letterSpacing: '-0.3px' }}>
                 Send Email
               </Typography>
-              <IconButton onClick={() => setSendDialog(false)}>
+              <IconButton onClick={closeSendDialog}>
                 <Cancel />
               </IconButton>
             </Stack>
@@ -1462,6 +1736,12 @@ function PromotionalEmailsManagement() {
                 />
               )}
               
+              {selectedTemplate?.dynamicFields?.length > 0 && (
+                <Stack spacing={2}>
+                  {selectedTemplate.dynamicFields.map((field) => renderDynamicFieldInput(field))}
+                </Stack>
+              )}
+
               <Box sx={{ display: 'flex', gap: 2 }}>
                 <TextField
                   fullWidth
@@ -1503,7 +1783,7 @@ function PromotionalEmailsManagement() {
           </DialogContent>
           <DialogActions sx={{ p: 2.5, background: '#fafafa', borderTop: '1px solid #e0e0e0' }}>
             <Button 
-              onClick={() => setSendDialog(false)}
+              onClick={closeSendDialog}
               disabled={sending}
               sx={{ 
                 textTransform: 'none',
@@ -1517,7 +1797,12 @@ function PromotionalEmailsManagement() {
               variant="contained"
               startIcon={sending ? <CircularProgress size={20} color="inherit" /> : <Send />}
               onClick={handleSendEmail}
-              disabled={sending || !emailData.subject || (emailData.recipients === 'selected' && selectedEmails.length === 0)}
+              disabled={
+                sending ||
+                !emailData.subject ||
+                (emailData.recipients === 'selected' && selectedEmails.length === 0) ||
+                hasMissingRequiredDynamicFields(selectedTemplate, dynamicFieldValues)
+              }
               sx={{
                 textTransform: 'none',
                 background: '#1a1a2e',
