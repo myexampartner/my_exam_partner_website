@@ -47,24 +47,24 @@ function createOrganizationSchema(data) {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
     '@id': 'https://www.myexampartner.com/#organization',
-    name: data.name || 'Exam Partner',
+    name: data.name || 'My Exam Partner',
     alternateName: 'My Exam Partner',
     url: data.url || 'https://www.myexampartner.com',
     logo: data.logo || 'https://www.myexampartner.com/images/my-exam-partner-logo.jpg',
     description: data.description || 'Leading online tutoring platform for CBSE, IB, HKDSE, and Canadian Curriculum',
     address: {
       '@type': 'PostalAddress',
-      addressCountry: 'PK',
-      addressLocality: 'Pakistan'
+      addressCountry: 'UK',
+      addressLocality: 'London'
     },
     contactPoint: {
       '@type': 'ContactPoint',
       contactType: 'Customer Service',
       email: data.email || 'info@myexampartner.com',
-      availableLanguage: ['en', 'ur']
+      availableLanguage: ['en', 'es', 'ur']
     },
     sameAs: [
-      'https://www.facebook.com/myexampartner',
+      'https://www.facebook.com/profile.php?id=61581809366658&mibextid=wwXIfr&rdid=7GyXybyRhrntm8J9&share_url=https%3A%2F%2Fwww.facebook.com%2Fshare%2F1CuB3RkK29%2F%3Fmibextid%3DwwXIfr#',
       'https://www.twitter.com/myexampartner',
       'https://www.linkedin.com/company/myexampartner'
     ],
@@ -81,7 +81,7 @@ function createWebsiteSchema(data) {
   return {
     '@context': 'https://schema.org',
     '@type': 'WebSite',
-    name: 'Exam Partner',
+    name: 'My Exam Partner',
     url: 'https://www.myexampartner.com',
     description: 'Online tutoring and exam preparation platform',
     publisher: {
@@ -111,7 +111,7 @@ function createCourseSchema(data) {
     offers: {
       '@type': 'Offer',
       price: data.price || '0',
-      priceCurrency: 'PKR',
+      priceCurrency: 'USD',
       availability: 'https://schema.org/InStock'
     }
   };

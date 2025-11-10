@@ -36,7 +36,7 @@ export default function SEOMeta({
       <meta name="title" content={fullTitle} />
       <meta name="description" content={description} />
       <meta name="keywords" content={keywords} />
-      <meta name="author" content="Exam Partner" />
+      <meta name="author" content="My Exam Partner" />
       <meta name="robots" content={noindex ? 'noindex,nofollow' : 'index,follow'} />
       <meta name="language" content="English" />
       <meta name="revisit-after" content="7 days" />
@@ -50,7 +50,7 @@ export default function SEOMeta({
       <meta property="og:title" content={fullTitle} />
       <meta property="og:description" content={description} />
       <meta property="og:image" content={image} />
-      <meta property="og:site_name" content="Exam Partner" />
+      <meta property="og:site_name" content="My Exam Partner" />
       <meta property="og:locale" content="en_US" />
       
       {author && <meta property="article:author" content={author} />}
