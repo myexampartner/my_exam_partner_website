@@ -116,7 +116,7 @@ export default function RootLayout({ children }) {
         <ReduxProvider>
           <LoadingProvider>
             {children}
-            <WhatsAppFloatButton />
+            {/* <WhatsAppFloatButton /> */}
           </LoadingProvider>
         </ReduxProvider>
       </body>
