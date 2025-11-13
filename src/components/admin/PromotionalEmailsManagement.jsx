@@ -248,7 +248,7 @@ function PromotionalEmailsManagement() {
           label: "Get Started Button URL",
           type: "url",
           required: true,
-          defaultValue: "https://myexampartner.com/get-started",
+          defaultValue: "http://localhost:3000/contact",
           helperText: "Paste the full link for the Get Started button",
         },
       ],
@@ -306,7 +306,7 @@ function PromotionalEmailsManagement() {
           label: "Claim Your Discount Button URL",
           type: "url",
           required: true,
-          defaultValue: "https://myexampartner.com/pricing",
+          defaultValue: "https://www.myexampartner.com/pricing",
           helperText: "Paste the link for the Claim Your Discount button",
         },
       ],
@@ -395,7 +395,7 @@ function PromotionalEmailsManagement() {
           label: "Join Session URL",
           type: "url",
           required: true,
-          defaultValue: "https://myexampartner.com/session",
+          defaultValue: "http://localhost:3000/contact",
         },
       ],
       renderContent: (values) => {
@@ -487,7 +487,7 @@ function PromotionalEmailsManagement() {
           label: "Enroll Now Button URL",
           type: "url",
           required: true,
-          defaultValue: "https://myexampartner.com/courses/advanced-physics",
+          defaultValue: "https://www.myexampartner.com/curriculum",
         },
       ],
       renderContent: (values) => {
@@ -1692,8 +1692,8 @@ function PromotionalEmailsManagement() {
               </IconButton>
             </Stack>
           </DialogTitle>
-          <DialogContent sx={{ p: 3 }}>
-            <Stack spacing={3}>
+          <DialogContent sx={{ p: 3 ,mt:1}}>
+            <Stack spacing={3} sx={{mt:2}}>
               <TextField
                 fullWidth
                 label="Subject Line"
@@ -1742,7 +1742,7 @@ function PromotionalEmailsManagement() {
                 </Stack>
               )}
 
-              <Box sx={{ display: 'flex', gap: 2 }}>
+              {/* <Box sx={{ display: 'flex', gap: 2 }}>
                 <TextField
                   fullWidth
                   type="date"
@@ -1770,7 +1770,7 @@ function PromotionalEmailsManagement() {
                   }}
                 />
               </Box>
-              
+               */}
               <Alert severity="info" sx={{ borderRadius: 2 }}>
                 <Typography variant="body2">
                   This email will be sent to <strong>{getRecipientCount(emailData.recipients)}</strong> recipients.
