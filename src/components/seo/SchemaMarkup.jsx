@@ -47,7 +47,7 @@ function createOrganizationSchema(data) {
     '@context': 'https://schema.org',
     '@type': 'EducationalOrganization',
     '@id': 'https://www.myexampartner.com/#organization',
-    name: data.name || 'My Exam Partner',
+    name: 'My Exam Partner' || data.name,
     alternateName: 'My Exam Partner',
     url: data.url || 'https://www.myexampartner.com',
     logo: data.logo || 'https://www.myexampartner.com/images/my-exam-partner-logo.jpg',

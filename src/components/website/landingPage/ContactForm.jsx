@@ -44,8 +44,8 @@ function ContactUs() {
 
     if (!formData.phone) {
       newErrors.phone = "WhatsApp number is required.";
-    } else if (!/^\d{11}$/.test(formData.phone)) {
-      newErrors.phone = "WhatsApp number must be exactly 11 digits.";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "WhatsApp number atleast 10 digits.";
     }
 
     if (!formData.curriculum) {
@@ -131,6 +131,7 @@ function ContactUs() {
 
   return (
     <Stack
+    id="contact-form"
       direction={isBelow900 ? "column" : isBelow1200 ? "column" : "row"}
       justifyContent={"space-between"}
       maxWidth={["95%", "75%", "75%", "90%", "70%"]}

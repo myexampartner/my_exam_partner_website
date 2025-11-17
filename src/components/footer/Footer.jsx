@@ -18,11 +18,13 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import toast, { Toaster } from "react-hot-toast";
 import Link from "next/link"; // ✅ use Next.js Link
 import Swal from "sweetalert2";
+import { useRouter } from "next/navigation";
 
 function Footer() {
+  const router = useRouter()
   const iconData = [
     { icon: FacebookRoundedIcon, link: "https://www.facebook.com/share/1CuB3RkK29/?mibextid=wwXIfr" },
-    { icon: InstagramIcon, link: "https://www.instagram.com/haadihelpsanimals?igsh=cHpyajRjaGdkZGxm&utm_source=qr" },
+    { icon: InstagramIcon, link: "https://www.instagram.com/myexampartnerofficial?igsh=OXV4M25nN2RsdThx" },
     { icon: LinkedInIcon, link: "https://www.linkedin.com" },
   ];
 
@@ -255,6 +257,7 @@ function Footer() {
                     src="/images/my-exam-partner-logo.jpg"
                     alt="Logo"
                     style={{ height: 70, width: 70 }}
+                    onClick={() => router.push('/admin/dashboard')}
                   />
                   <Typography
                     color="var(--dark-color)"

@@ -1,6 +1,6 @@
 {
-  "name": "Exam Partner - Expert Online Tutoring",
-  "short_name": "Exam Partner",
+  "name": "My Exam Partner - Expert Online Tutoring",
+  "short_name": "My Exam Partner",
   "description": "Leading online tutoring platform for IGCSE, GCSE, A-Level, and IB students",
   "start_url": "/",
   "display": "standalone",

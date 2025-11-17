@@ -4,8 +4,10 @@ import StarRoundedIcon from '@mui/icons-material/StarRounded';
 import Person2RoundedIcon from '@mui/icons-material/Person2Rounded';
 import Lottie from 'lottie-react';
 import whyChooseAnimation from './why-choose-animation.json';
+import { useRouter } from 'next/navigation';
 
 function Booking() {
+  const router = useRouter()
   const pointsData=[
     {
       info:"Certified & Verified Tutors – Experts you can trust for every subject."
@@ -53,7 +55,7 @@ function Booking() {
             })
           }
         </Stack>
-         <Button  sx={{color:"var(--text-primary)",mt:10 ,  backgroundColor:"var(--info-color)",color:"var(--text-primary)",border:"1px solid var(--info-color)",maxWidth:"250px",fontSize:{xs:14,sm:16},px:{xs:1.5},py:{xs:1,sm:1.5,md:2},borderRadius:10}}  endIcon={<Person2RoundedIcon sx={{width:25,height:25}}/>}>Book Your Tutor</Button>
+         <Button onClick={()=> router.push('/tutors')}  sx={{color:"var(--text-primary)",mt:10 ,  backgroundColor:"var(--info-color)",color:"var(--text-primary)",border:"1px solid var(--info-color)",maxWidth:"250px",fontSize:{xs:14,sm:16},px:{xs:1.5},py:{xs:1,sm:1.5,md:2},borderRadius:10}}  endIcon={<Person2RoundedIcon sx={{width:25,height:25}}/>}>Book Your Tutor</Button>
     </Stack>
 
     {/* right section lottie animation  */}

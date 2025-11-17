@@ -50,9 +50,9 @@ export async function POST(request) {
     }
 
     // Phone validation (if provided)
-    if (phone && !/^\d{11}$/.test(phone)) {
+    if (phone && !/^\d{10}$/.test(phone)) {
       return NextResponse.json(
-        { success: false, error: 'Phone number must be exactly 11 digits' },
+        { success: false, error: 'Phone number must be atleast 10 digits' },
         { status: 400 }
       );
     }

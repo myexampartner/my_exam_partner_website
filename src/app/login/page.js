@@ -282,7 +282,7 @@ export default function LoginPage() {
       <Box
         sx={{
           minHeight: "100vh",
-          background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+          background: " linear-gradient(135deg, #EB7D7E, #B097BE, #6FD4E6)",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -319,7 +319,7 @@ export default function LoginPage() {
                 width: 90,
                 height: 90,
                 borderRadius: "50%",
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                background: " linear-gradient(135deg, #EB7D7E, #B097BE, #6FD4E6)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
@@ -355,7 +355,7 @@ export default function LoginPage() {
               fontWeight="bold" 
               gutterBottom
               sx={{
-                background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+                background: " linear-gradient(135deg, #EB7D7E, #B097BE, #6FD4E6)",
                 backgroundClip: "text",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",

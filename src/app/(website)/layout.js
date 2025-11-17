@@ -3,6 +3,7 @@
 import { ThemeProvider, createTheme, CssBaseline } from "@mui/material";
 import Footer from "@/components/footer/Footer";
 import Navbar from "@/components/navbar/Navbar";
+import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
 
 const theme = createTheme({
   typography: {
@@ -16,6 +17,7 @@ export default function WebLayout({ children }) {
       <CssBaseline />
       <Navbar />
       {children}
+      <WhatsAppFloatButton />
       <Footer />
     </ThemeProvider>
   );

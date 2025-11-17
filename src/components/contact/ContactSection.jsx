@@ -53,8 +53,8 @@ export default function ContactSection() {
 
     if (!formData.phone) {
       newErrors.phone = "WhatsApp number is required.";
-    } else if (!/^\d{11}$/.test(formData.phone)) {
-      newErrors.phone = "WhatsApp number must be exactly 11 digits.";
+    } else if (!/^\d{10}$/.test(formData.phone)) {
+      newErrors.phone = "WhatsApp number atleast 10 digits.";
     }
 
     if (!formData.curriculum) {
@@ -249,7 +249,7 @@ export default function ContactSection() {
             {[
               { Icon: FacebookIcon, link: "https://www.facebook.com/share/1CuB3RkK29/?mibextid=wwXIfr" },
               { Icon: LinkedInIcon, link: "https://www.linkedin.com" },
-              { Icon: InstagramIcon, link: "https://www.instagram.com/haadihelpsanimals?igsh=cHpyajRjaGdkZGxm&utm_source=qr" }
+              { Icon: InstagramIcon, link: "https://www.instagram.com/myexampartnerofficial?igsh=OXV4M25nN2RsdThx" }
             ].map((item, index) => (
               <a
                 key={index}

@@ -52,8 +52,6 @@ function OurTeam() {
         alignItems={"center"}
         justifyContent={"center"}
         maxWidth={"100%"}
-        data-aos="fade-up"
-        data-aos-delay="100"
         sx={{
           backgroundImage: `
             linear-gradient(135deg, #EB7D7E, #B097BE, #6FD4E6

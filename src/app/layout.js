@@ -2,8 +2,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Quicksand } from "next/font/google";
 import "./globals.css";
 import ReduxProvider from "@/components/providers/ReduxProvider";
-import { LoadingProvider } from "@/components/providers/LoadingProvider";
-import WhatsAppFloatButton from "@/components/WhatsAppFloatButton";
+import { LoadingProvider } from "@/components/providers/LoadingProvider"; 
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,7 +22,7 @@ const quicksand = Quicksand({
 
 export const metadata = {
   title: {
-    default: "Expert Online Tutoring for IGCSE, GCSE, A-Level & IB | Exam Partner",
+    default: "My Exam Partner",
     template: "%s | Exam Partner"
   },
   description: "Leading online tutoring platform for IGCSE, GCSE, A-Level, and IB students. Expert tutors in Mathematics, Physics, Chemistry, Biology, English, and more. Book your free trial session today!",
@@ -57,7 +56,7 @@ export const metadata = {
     canonical: '/',
   },
   openGraph: {
-    title: "Expert Online Tutoring for IGCSE, GCSE, A-Level & IB | Exam Partner",
+    title: "My Exam Partner",
     description: "Leading online tutoring platform with expert tutors for IGCSE, GCSE, A-Level, and IB students. Quality education delivered at your convenience.",
     url: '/',
     siteName: 'Exam Partner',
@@ -115,8 +114,7 @@ export default function RootLayout({ children }) {
       <body className={`${geistSans.variable} ${geistMono.variable} ${quicksand.variable}`}>
         <ReduxProvider>
           <LoadingProvider>
-            {children}
-            <WhatsAppFloatButton />
+            {children} 
           </LoadingProvider>
         </ReduxProvider>
       </body>

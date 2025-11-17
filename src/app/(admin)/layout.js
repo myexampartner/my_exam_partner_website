@@ -464,9 +464,7 @@ export default function AdminLayout({ children }) {
           </Typography>
 
           <Stack direction="row" spacing={1.5}>
-            <IconButton sx={{ color: '#424242' }}>
-              <Notifications />
-            </IconButton>
+          
             <Avatar
               onClick={handleAvatarClick}
               sx={{

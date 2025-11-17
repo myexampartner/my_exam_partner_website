@@ -213,7 +213,7 @@ function AllTutors() {
   // Filters
   const [filters, setFilters] = useState({
     search: '',
-    status: '',
+    status: 'active', // Only show active tutors
     page: 1,
     limit: 9
   });
@@ -285,7 +285,7 @@ function AllTutors() {
   // Handle clear search
   const handleClearSearch = () => {
     setSearchInput('');
-    setFilters(prev => ({ ...prev, search: '', page: 1 }));
+    setFilters(prev => ({ ...prev, search: '', page: 1, status: 'active' }));
   };
 
   return (
@@ -482,6 +482,7 @@ function AllTutors() {
                   <Button
                     variant="contained"
                     onClick={handleSearchClick}
+                    size='small'
                     sx={{
                       minWidth: '120px',
                      backgroundColor: 'rgba(255, 96, 74, 1)',
@@ -508,7 +509,7 @@ function AllTutors() {
             </Grid>
             
             {/* Status Filter */}
-            <Grid size={{ xs: 12, sm: 6, md: 3 }}>
+            {/* <Grid size={{ xs: 12, sm: 6, md: 3 }}>
               <FormControl fullWidth size="medium">
                 <InputLabel>Filter by Status</InputLabel>
                 <Select
@@ -547,10 +548,10 @@ function AllTutors() {
                   </MenuItem>
                 </Select>
               </FormControl>
-            </Grid>
+            </Grid> */}
 
             {/* Reset Button */}
-            <Grid size={{ xs: 12, sm: 6, md: 2 }}>
+            {/* <Grid size={{ xs: 12, sm: 6, md: 2 }}>
               <Button
                 fullWidth
                 variant="outlined"
@@ -577,7 +578,8 @@ function AllTutors() {
               >
                 Reset
               </Button>
-            </Grid>
+            </Grid> */}
+
           </Grid>
         </Paper>
 
@@ -591,12 +593,14 @@ function AllTutors() {
               </Grid>
             ))
           ) : tutors.length > 0 ? (
-            // Show tutors
-            tutors.map((tutor) => (
-              <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tutor._id}>
-                <TutorCard tutor={tutor} />
-              </Grid>
-            ))
+            // Show only active tutors
+            tutors
+              .filter(tutor => tutor.status === 'active')
+              .map((tutor) => (
+                <Grid size={{ xs: 12, sm: 6, md: 4 }} key={tutor._id}>
+                  <TutorCard tutor={tutor} />
+                </Grid>
+              ))
           ) : (
             // No tutors found
             <Grid size={{ xs: 12 }}>

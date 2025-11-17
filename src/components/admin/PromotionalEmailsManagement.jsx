@@ -187,7 +187,6 @@ function PromotionalEmailsManagement() {
     const errorMessage = fieldErrors[field.name] || "";
 
     const sharedProps = {
-      key: field.name,
       fullWidth: true,
       label: field.label,
       value,
@@ -203,13 +202,13 @@ function PromotionalEmailsManagement() {
 
     switch (field.type) {
       case "textarea":
-        return <TextField {...sharedProps} multiline rows={4} />;
+        return <TextField key={field.name} {...sharedProps} multiline rows={4} />;
       case "number":
-        return <TextField {...sharedProps} type="number" />;
+        return <TextField key={field.name} {...sharedProps} type="number" />;
       case "url":
-        return <TextField {...sharedProps} type="url" />;
+        return <TextField key={field.name} {...sharedProps} type="url" />;
       default:
-        return <TextField {...sharedProps} />;
+        return <TextField key={field.name} {...sharedProps} />;
     }
   };
 

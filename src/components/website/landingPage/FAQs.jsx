@@ -74,18 +74,7 @@ function FAQs() {
             We’ve gathered the most common questions to make your experience
             smooth and stress-free.
           </Typography>
-          <Link href={"#"}>
-            <Stack
-              direction="row"
-              color="rgba(33, 59, 156, 1)"
-              alignItems="center"
-              justifyContent={{ xs: "center", md: "flex-start" }}
-              gap={0.5}
-            >
-              <Typography fontSize={{ xs: 16, md: 20 }}>More Faqs</Typography>
-              <ArrowForwardIosIcon sx={{ fontSize: 16 }} />
-            </Stack>
-          </Link>
+         
         </Stack>
 
         {/* FAQs */}
