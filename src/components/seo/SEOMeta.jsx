@@ -17,7 +17,7 @@ import Head from 'next/head';
  */
 
 export default function SEOMeta({
-  title = 'Exam Partner - Online Tutoring & Exam Preparation Platform',
+  title = 'My Exam Partner - Online Tutoring & Exam Preparation Platform',
   description = 'Expert online tutoring for CBSE, IB, HKDSE, and Canadian Curriculum. Qualified tutors, flexible schedules, and personalized learning.',
   keywords = 'online tutoring, exam preparation, CBSE, IB, HKDSE, Canadian Curriculum, online classes, home tuition',
   url = 'https://www.myexampartner.com',
@@ -27,7 +27,7 @@ export default function SEOMeta({
   publishedTime = '',
   noindex = false
 }) {
-  const fullTitle = title.includes('Exam Partner') ? title : `${title} - Exam Partner`;
+  const fullTitle = title.includes('My Exam Partner') ? title : `${title} - My Exam Partner`;
 
   return (
     <Head>

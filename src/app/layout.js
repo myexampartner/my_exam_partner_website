@@ -23,7 +23,7 @@ const quicksand = Quicksand({
 export const metadata = {
   title: {
     default: "My Exam Partner",
-    template: "%s | Exam Partner"
+    template: "%s | My Exam Partner"
   },
   description: "Leading online tutoring platform for IGCSE, GCSE, A-Level, and IB students. Expert tutors in Mathematics, Physics, Chemistry, Biology, English, and more. Book your free trial session today!",
   keywords: [
@@ -43,9 +43,9 @@ export const metadata = {
     "home tutoring",
     "virtual learning"
   ],
-  authors: [{ name: "Exam Partner" }],
-  creator: "Exam Partner",
-  publisher: "Exam Partner",
+  authors: [{ name: "My Exam Partner" }],
+  creator: "My Exam Partner",
+  publisher: "My Exam Partner",
   formatDetection: {
     email: false,
     address: false,
@@ -59,13 +59,13 @@ export const metadata = {
     title: "My Exam Partner",
     description: "Leading online tutoring platform with expert tutors for IGCSE, GCSE, A-Level, and IB students. Quality education delivered at your convenience.",
     url: '/',
-    siteName: 'Exam Partner',
+    siteName: 'My Exam Partner',
     images: [
       {
         url: '/images/my-exam-partner-logo.jpg',
         width: 1200,
         height: 630,
-        alt: 'Exam Partner - Expert Online Tutoring',
+        alt: 'My Exam Partner - Expert Online Tutoring',
       },
     ],
     locale: 'en_US',
@@ -76,7 +76,7 @@ export const metadata = {
     title: "Expert Online Tutoring for IGCSE, GCSE, A-Level & IB",
     description: "Leading online tutoring platform with expert tutors. Quality education delivered at your convenience.",
     images: ['/images/my-exam-partner-logo.jpg'],
-    creator: '@exampartner',
+    creator: '@myexampartner',
   },
   robots: {
     index: true,
